@@ -1,0 +1,43 @@
+version: '3.5'
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    command:
+      - '--config.=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml
+    expose:
+      - 9090
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+
+  redis:
+    restart: unless-stopped
+    image: redis:latest
+    ports:
+      # 端口映射
+      - 63790:6379
+    volumes:
+      # 持久化 目录映射
+      - "${PWD}/data/redis/redis.conf:/usr/local/etc/redis/redis.conf"
+      - "${PWD}/data/redis/data:/data"
+    command:
+      # 执行的命令
+      redis-server /usr/local/etc/redis/redis.conf
+    tty: true
+  myapp:
+    image: local/app:5.7.7-amd64-desktop
+    container_name: myapp
+    restart: unless-stopped
+    volumes:
+      - "/"

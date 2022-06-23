@@ -43,8 +43,8 @@ var (
 		[]string{"time", "method", "path"},
 	)
 )
-
-func metricsHandler() gin.HandlerFunc {
+// MetricsHandler 请求的监控中间件
+func MetricsHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Println("start monitor request...")
 		purl, _ := url.Parse(c.Request.RequestURI)

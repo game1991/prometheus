@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/ganlei/Desktop/prometheus'
+go build -mod vendor -ldflags "-w -s -extldflags '-static' -X 'github.com/gotomicro/ego/core/eapp.appName=app' -X 'github.com/gotomicro/ego/core/eapp.buildAppVersion=3b2c2e1 first commit' -X 'github.com/gotomicro/ego/core/eapp.buildStatus=Modified' -X 'github.com/gotomicro/ego/core/eapp.buildUser=localuser' -X 'github.com/gotomicro/ego/core/eapp.buildHost=10.20.43.36' -X 'github.com/gotomicro/ego/core/eapp.buildTime=2022-05-06/16:55:13'" -o prometheus main.go
+make: Leaving directory '/home/ganlei/Desktop/prometheus'
+ 

@@ -1,0 +1,7 @@
+package load
+
+
+
+func Mysql(){
+	
+}

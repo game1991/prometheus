@@ -1,0 +1,49 @@
+[Server.http]
+    address = "0.0.0.0:9001" # 常见容器中运行
+
+[DB]
+    [DB.uosgo]                                      # DB组名称:test
+        [DB.uosgo.Master]                           # Master配置
+            dialect = "mysql"                       # DB类型:mysql
+            dsn = "root:uosgo1235@tcp(127.0.0.1:3306)/uosgo?charset=utf8&parseTime=True&loc=Local&readTimeout=1s&timeout=1s&writeTimeout=3s"      # 地址
+            maxOpenConns = 100                      # 最大连接数
+            maxIdleConns = 50                       # 最大空闲连接数
+            connMaxLifetime = 300                   # 最大空闲回收时间，单位：s
+            logMode = true                          # 是否开启debug日志
+            logSQL = true                           # 是否显示日志中的sql
+            slowThreshold = 500                     # 慢日志阈值，单位：ms
+        [DB.uosgo.Slave]                            # Slave配置
+            dialect = "mysql"
+            dsn = ["root:uosgo1235@tcp(127.0.0.1:3306)/uosgo?charset=utf8&parseTime=True&loc=Local&readTimeout=1s&timeout=1s&writeTimeout=3s", "root:uosgo1235@tcp(127.0.0.1:3306)/uosgo?charset=utf8&parseTime=True&loc=Local&readTimeout=1s&timeout=1s&writeTimeout=3s"]
+            maxOpenConns = 100
+            maxIdleConns = 50
+            connMaxLifetime = 300
+            logMode = true
+            logSQL = true
+            slowThreshold = 500
+[Redis]
+    [Redis.uosgo]                   # Redis组名称:test
+        [Redis.uosgo.Master]        # Master配置
+            dsn = "127.0.0.1:6379"
+            password = "uosgopass1235"
+            slowThreshold = 5
+        [Redis.uosgo.Slave]         # Slave配置
+            dsn = ["127.0.0.1:6379","127.0.0.1:6379"]
+            password = "uosgopass1235"
+            slowThreshold = 5
+[Log]
+    output = "stdout"
+    level = "info"
+    jsonEncode = true
+    dir = "/tmp/uosgo"
+    fileName = "default.log"
+    addCaller = true
+    callerSkip = 2
+    maxSize = 128
+    maxAge = 30
+    maxBackups = 7
+    caa = true
+    [Log.fields] # 每条日志都带这个关键字
+        appName = "uosgo"
+[swagger]
+    passed = true # swagger 开关  false 禁用 true 启用

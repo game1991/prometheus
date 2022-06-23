@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"prometheus/controller"
 
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
@@ -17,13 +18,18 @@ var pingCounter = prometheus.NewCounter(
 
 // API ...
 func API(engine *gin.Engine) {
-	engine.Use()
+	engine.Use(controller.MetricsHandler())
+	router := engine.Group("")
+
+	{
+		router.GET("hello")
+	}
 }
 
 // SYS ...
 func SYS(engine *gin.Engine) {
 	prometheus.MustRegister(pingCounter)
-	sysGroup := engine.Group("/sys")
+	sysGroup := engine.Group("sys")
 	sysGroup.GET("ping", func(ctx *gin.Context) {
 		pingCounter.Inc()
 		ctx.AbortWithStatusJSON(http.StatusOK, gin.H{
@@ -35,5 +41,5 @@ func SYS(engine *gin.Engine) {
 
 // Prometheus ...
 func Prometheus(engine *gin.Engine) {
-	engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
+	engine.GET("metrics", gin.WrapH(promhttp.Handler()))
 }
